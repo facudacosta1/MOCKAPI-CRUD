@@ -2,11 +2,11 @@
 //                                                              FUNCIONES
                                             //---------------------------------------//
 
-//Muestra la data si se ingresa id o no, (con fetch)
+// URL DE LA API Y SELECTOR DEL CONTENEDOR DEL RESULTADO
 let URL_API = 'https://6554112c63cafc694fe61e6e.mockapi.io/users';
 let results = document.getElementById('results');
 
-//CREATE : POST
+//CREATE : POST ENVIA LOS DATOS AL SERVIDOR, PRIMERO TOMA LOS VALORES DE LOS INPUT Y LOS TRANSFORMA EN UN OBJETO
 async function enviarData() {
     try {
         let nombre = document.getElementById('inputPostNombre').value;
@@ -29,14 +29,14 @@ async function enviarData() {
             throw new Error(`Error: ${response.status}`);
         }
 
-        mostrarData()
+        mostrarData() //Llama a la función para mostrar los datos
 
     } catch (error) {
         console.log(error);
     }
 }
 
-//READ : GET
+//READ : GET OBTIENE TODOS LOS DATOS O UNO EN ESPECIFICO POR ID
 async function mostrarData(id) {
     try {
         if (!id) {
@@ -64,12 +64,12 @@ async function mostrarData(id) {
 
             return data;
         } else {
-            verifyIDandGetDataID(id)
+            verifyIDandGetDataID(id) //VERIFICA SI EXISTE EL ID EN LA BASE DE DATOS
             .then (data => {
                 if(data.id === undefined){
-                    results.innerHTML = '';
+                    results.innerHTML = ''; //Si no existe borra contenedor results
                     return
-                } else {
+                } else {                    //Si existe muestra los datos del id
                     results.innerHTML = '';
                     results.innerHTML += `
                         <p class="p-0 m-0">ID: ${data.id}</p>
@@ -84,6 +84,8 @@ async function mostrarData(id) {
     }
     
 }
+
+//FUNCION PARA VERIFICAR SI EXISTE UN ID EN LA BASE DE DATOS Y RETORNA LOS DATOS SI EXISTEN
 async function verifyIDandGetDataID(id){
     try{
         const response = await fetch(URL_API + '/' + id);
@@ -98,7 +100,7 @@ async function verifyIDandGetDataID(id){
     }
 }
 
-//UPDATE : PUT
+//UPDATE : PUT EDITA LOS DATOS, PRIMERO TOMA LOS VALORES DE LOS INPUT Y LOS TRANSFORMA EN UN OBJETO, LUEGO MUESTRA LA DATA ACTUALIZADA
 async function actualizarData() {
     let inputPutId = document.getElementById('inputPutId').value;
     let inputPutNombre = document.getElementById('inputPutNombre').value;
@@ -123,7 +125,7 @@ async function actualizarData() {
     mostrarData();
 }
 
-//DELETE : DELETE
+//DELETE : DELETE BORRA LOS DATOS
 async function borrarData(id) {
     const response = await fetch(URL_API + '/' + id, {
         method: 'DELETE',
